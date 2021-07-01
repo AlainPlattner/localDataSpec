@@ -25,6 +25,7 @@ function rs=findDepthMinDiff_SRD(spec,lrng,robs,rref,rstart,Ltap,Lmax,bias)
 %
 % Last modified by plattner-at-alumni.ethz.ch, 07/10/2020
 
+defval('bias',false)
   
 opts = optimset('MaxFunEvals',10000);
 
