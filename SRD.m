@@ -5,7 +5,7 @@ function Ssrd_reg=SRD(rsource,robs,rref,Lmax,Ltap,bias)
 % To incorporate the bias created by tapering the radial derivative,
 % then get the potential-field coefficients, then power spec, then
 % "undoing" the (l+1)^2 factor, set bias=true
-
+defval('bias', false)
   
 %%% For a given rcore, calculate spec, normalized to start at 1
 ltot = (0:(Lmax))';
