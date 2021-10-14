@@ -19,8 +19,15 @@ function Smt=localizeSpec(S,Ltap)
   % Last modified by aplattner-at-alumni.ethz.ch, 05/19/2019
 
   Lmax = length(S)-1;
-  M = mcouplings(Ltap,Lmax,0);
-
+  try
+    M = mcouplings(Ltap,Lmax,0);
+  catch
+    % In case the folder with the precalculated Wigner symbols
+    % is empty, create one.
+    wignercycle(1,0,0);
+    M = mcouplings(Ltap,Lmax,0);
+  end
+    
   S=S(:)';
   Smt = S*M;
   
