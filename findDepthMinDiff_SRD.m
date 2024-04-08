@@ -1,5 +1,5 @@
-function rs=findDepthMinDiff_SRD(spec,lrng,robs,rref,rstart,Ltap,Lmax,bias)
-% rs=findDepthMinDiff_SRD(spec,lrng,robs,rref,rstart,Ltap,bias)
+function varargout = findDepthMinDiff_SRD(spec,lrng,robs,rref,rstart,Ltap,Lmax,sig)
+% [rs,A] = findDepthMinDiff_SRD(spec,lrng,robs,rref,rstart,Ltap,Lmax,sig)
 %
 % Calculate source radius for which an upward-continued and regionalized
 % Shell Randomly Oriented Dipole spectrum has the minimal difference with
@@ -15,18 +15,32 @@ function rs=findDepthMinDiff_SRD(spec,lrng,robs,rref,rstart,Ltap,Lmax,bias)
 % rstart   start value for source radius testing
 % Ltap     tapering bandwidth
 % Lmax     maximum spherical-harmonic degree for the McLeod spectrum
-% bias     If local spec was obtained from tapering radial derivative
-%          and then backtransforming, set this to "true" to take the
-%          resulting bias into account
+% sig     standard deviation if want to use Wieczorek's minimization
 %  
 % OUTPUT:
 %
 % rs       source radius [rm]
+% A        amplitude (multiply with SRD spec for the given source radius)
 %
 % Last modified by plattner-at-alumni.ethz.ch, 07/10/2020
 
-defval('bias',false)
-  
-opts = optimset('MaxFunEvals',10000);
 
-rs = fminsearch(@(x) mindiff_SRD(spec,x,lrng,Ltap,robs,rref,Lmax,bias), rstart, opts);
+defval('sig',[])
+  
+%opts = optimset('MaxFunEvals',10000);
+%rs = fminsearch(@(x) mindiff_SRD(spec,x,lrng,Ltap,robs,rref,Lmax,sig), rstart, opts);
+
+% Trying to solve for rs and amp
+xstart = [rstart,rms(spec)];
+xopt = fminsearch(@(x) mindiff_SRD(spec,x,lrng,Ltap,robs,rref,Lmax,sig), xstart);%, opts);
+
+if isempty(sig)
+    xopt = xopt(1);
+    % Because without the sig, we just use bestA instead of solved-for A.
+end
+
+if nargout < 2
+    varargout = {xopt(1)};
+else
+    varargout = {xopt(1),xopt(2)};
+end
