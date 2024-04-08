@@ -1,4 +1,6 @@
 function  coef=Simons2Olsen(coef)
+% coef=Simons2Olsen(coef)
+%
 % Needs to have L=0 in there, and be in ADDMON format
 
 Lmax=sqrt(length(coef))-1;

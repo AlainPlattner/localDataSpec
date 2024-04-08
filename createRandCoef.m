@@ -1,4 +1,5 @@
 function [coefsO,coefsS] = createRandCoef(spc, Lfull, rplanet)
+% Output coefficients are in addmon
 
   [m,l,mzero]=addmon(Lfull);
   c=randn(addmup(Lfull),2);
