@@ -1,17 +1,17 @@
-function err=mindiff_SRD(spec,x,lrng,Ltap,robs,rref,Lmax,sig)
-% err=mindiff_SRD(spec,rcore,lrng,Ltap,robs,rref,Lmax,bias)
-% err=mindiff_SRD(spec,rcore,lrng,Ltap,robs,rref,Lmax)
+function err=mindiff_SRD(spec,x,lrng,Ltap,robs,rref,Lmax,M,sig)
+% err=mindiff_SRD(spec,x,lrng,Ltap,robs,rref,Lmax,M,sig)
 %
 % Calculates the root mean square error of the misfit of the
 % logariths of the provided regional spectrum and the regionalized
 % Shell Randomly Oriented Dipole (SRD) spectrum 
 % (Voorhies, Sabaka, Purucker, 2002) for the degrees given in lrng.
-defval('sig',[])
+  defval('sig',[])
+  defval('M',[])
 
 rcore = x(1);
 A = x(2);
 
-Ssrd_reg=SRD(rcore,robs,rref,Lmax,Ltap);
+Ssrd_reg=SRD(rcore,robs,rref,Lmax,Ltap,M);
 
 %%% Take only the degrees within the given range
 ls=min(lrng):max(lrng);

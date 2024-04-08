@@ -22,7 +22,7 @@ function varargout = findDepthMinDiff_SRD(spec,lrng,robs,rref,rstart,Ltap,Lmax,s
 % rs       source radius [rm]
 % A        amplitude (multiply with SRD spec for the given source radius)
 %
-% Last modified by plattner-at-alumni.ethz.ch, 07/10/2020
+% Last modified by plattner-at-alumni.ethz.ch, 04/08/2024
 
 
 defval('sig',[])
@@ -30,9 +30,19 @@ defval('sig',[])
 %opts = optimset('MaxFunEvals',10000);
 %rs = fminsearch(@(x) mindiff_SRD(spec,x,lrng,Ltap,robs,rref,Lmax,sig), rstart, opts);
 
+% To speed up localization:
+try
+  M = mcouplings(Ltap,Lmax,0);
+catch
+  % In case the folder with the precalculated Wigner symbols
+  % is empty, create one.
+  wignercycle(1,0,0);
+  M = mcouplings(Ltap,Lmax,0);
+end
+
 % Trying to solve for rs and amp
 xstart = [rstart,rms(spec)];
-xopt = fminsearch(@(x) mindiff_SRD(spec,x,lrng,Ltap,robs,rref,Lmax,sig), xstart);%, opts);
+xopt = fminsearch(@(x) mindiff_SRD(spec,x,lrng,Ltap,robs,rref,Lmax,M,sig), xstart);%, opts);
 
 if isempty(sig)
     xopt = xopt(1);
