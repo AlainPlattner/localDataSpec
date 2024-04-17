@@ -11,8 +11,7 @@ function para = findParaMinDiff_Wiec(spec,lrng,rplanet,startPara,Ltap,Lmax,sig,o
   % rplanet       planet radius
   % startPara     starting values for the parameters [rs,cTH,d]
   %                  rs is center of sills,
-  %                  cTH is sill radis,
-  %                  d is sill thickness
+  %                  cTH is sill radius,
   % Ltap          tapering bandwidth
   % Lmax          maximum spherical harmonic degree
   % sig           standard deviation per degree of the multitaper spectrum
@@ -41,14 +40,12 @@ function para = findParaMinDiff_Wiec(spec,lrng,rplanet,startPara,Ltap,Lmax,sig,o
   %opts = optimset('MaxFunEvals',10000);
   %opts = optimset('Algorithm','sqp');
   if optA
-    Sw_loc = specWiec(startPara(1),startPara(2),startPara(3),1,rplanet,Lmax,Ltap,M);
+    Sw_loc = specWiec(startPara(1),startPara(2),1,rplanet,Lmax,Ltap,M);
     lsA = (min(lrng)+1) : (max(lrng)+1);
     Astart = bestA(Sw_loc(lsA),spec(lsA));
     xstart = [startPara(:)',Astart];
-    %lb = [0,0,0,0];
   else
     xstart = startPara;
-    %lb = [0,0,0];
   end
 
   para = fminsearch(@(x) mindiff_Wiec(spec, x, lrng, Ltap, rplanet, Lmax, M, sig, optA) , xstart);%, opts);

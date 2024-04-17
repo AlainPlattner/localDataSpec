@@ -1,11 +1,11 @@
 function err = mindiff_Wiec(spec, x, lrng, Ltap, rplanet, Lmax, M, sig, optA)
-  % x = [rs,cTH,d, (magnitude)]
+  % x = [rs,cTH,(magnitude)]
   % spec needs to include the zero degree value
 
   defval('sig',[]);
   defval('optA',false)
   
-  Sw_loc = specWiec(x(1),x(2),x(3),1,rplanet,Lmax,Ltap,M);
+  Sw_loc = specWiec(x(1),x(2),1,rplanet,Lmax,Ltap,M);
 
   % Use only degrees in given range
   ls=min(lrng):max(lrng);
@@ -14,7 +14,7 @@ function err = mindiff_Wiec(spec, x, lrng, Ltap, rplanet, Lmax, M, sig, optA)
 
   % Normalize
   if optA
-    Sw_loc = x(4)*Sw_loc;
+    Sw_loc = x(3)*Sw_loc;
   else
     A=bestA(Sw_loc,spec);
     Sw_loc=A*Sw_loc;

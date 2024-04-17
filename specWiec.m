@@ -1,6 +1,8 @@
-function Sl=specWiec(rs,cTH,d,Mag,rplanet,Lmax,Ltap,M)
-  %  Sl=specWiec(rs,cTH,d,Mag,rplanet,Lmax,Ltap)
+function Sl=specWiec(rs,cTH,Mag,rplanet,Lmax,Ltap,M)
+  %  Sl=specWiec(rs,cTH,Mag,rplanet,Lmax,Ltap)
   %
+  % Note that the thickness d is part of the magnitude, as its influence
+  % does not depend on the degree l
   % Based on Wieczorek (2018) eq (27)
   % as well as Gong & Wieczorek (2021) eq (2)
 
@@ -10,7 +12,8 @@ function Sl=specWiec(rs,cTH,d,Mag,rplanet,Lmax,Ltap,M)
   cTH = cTH*pi/180;
   ls=(1:Lmax)';
   mu0 = 4*pi*1e7;
-
+  d = 1;
+  
   Sl = mu0^2*Mag*(ls+1).*(ls+1).^2/12 .* (d/rplanet)^2 .* (rs/rplanet).^(2*ls+2) .* ...
        (0.5*(  intfun1(ls,cTH) + pval1(ls,cTH)  ).^2 + ...
          (  intfun0(ls,cTH) - pval1(ls,cTH) ).^2 );
