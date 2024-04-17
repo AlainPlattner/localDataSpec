@@ -5,6 +5,7 @@ function Sl=specWiec(rs,cTH,d,Mag,rplanet,Lmax,Ltap,M)
   % as well as Gong & Wieczorek (2021) eq (2)
 
   defval('M',[])
+  defval('Ltap',0)
 
   cTH = cTH*pi/180;
   ls=(1:Lmax)';
@@ -17,16 +18,19 @@ function Sl=specWiec(rs,cTH,d,Mag,rplanet,Lmax,Ltap,M)
   % Now localize
   ltot = (0:Lmax)';
   Sl = [0;Sl];
-  % Transform to density spectrum
-  Sl_pd = Sl./(ltot+1)./(2*ltot+1);
-  % Localize
-  if isempty(M)
-    Sl_pd_loc = localizeSpec(Sl_pd,Ltap)';
-  else
-    Sl_pd_loc = (Sl_pd'*M)';
+
+  if Ltap>0
+    % Transform to density spectrum
+     Sl_pd = Sl./(ltot+1)./(2*ltot+1);
+    % Localize
+    if isempty(M)
+        Sl_pd_loc = localizeSpec(Sl_pd,Ltap)';
+    else
+        Sl_pd_loc = (Sl_pd'*M)';
+    end
+    % Transform back to ML spec
+    Sl = Sl_pd_loc.*(ltot+1).*(2*ltot+1);
   end
-  % Transform back to ML spec
-  Sl = Sl_pd_loc.*(ltot+1).*(2*ltot+1);
   
 end
   
