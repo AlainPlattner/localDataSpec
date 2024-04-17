@@ -1,28 +1,29 @@
 function para = findParaMinDiff_Wiec(spec,lrng,rplanet,startPara,Ltap,Lmax,sig,optA)
-  % para = findParaMinDiff_Wiec(spec,lrng,rplanet,startPara,Ltap,Lmax,sig)
+  % para = findParaMinDiff_Wiec(spec,lrng,rplanet,startPara,Ltap,Lmax,sig,optA)
   %
   % Calculate the parameters for Wieczorek 2018 equation 27 
   % (same as Gong & Wieczorek 2021 eq 2).
   %
   % INPUT:
   %
-  % spec         spectrum to be fitted
-  % lrng           degrees for which to fit spectrum
-  % rplanet      planet radius
-  % startPara  starting values for the parameters [rs,cTH,d]
-  %                 rs is center of sills, cTH is sill radis, d is sill
-  %                 thickness
-  % Ltap         tapering bandwidth
-  % Lmax       maximum spherical harmonic degree
-  % sig        standard deviation per degree of the multitaper spectrum
-  % optA       want to also optimize magnitude? Default: false
+  % spec          spectrum to be fitted
+  % lrng          degrees for which to fit spectrum
+  % rplanet       planet radius
+  % startPara     starting values for the parameters [rs,cTH,d]
+  %                  rs is center of sills,
+  %                  cTH is sill radis,
+  %                  d is sill thickness
+  % Ltap          tapering bandwidth
+  % Lmax          maximum spherical harmonic degree
+  % sig           standard deviation per degree of the multitaper spectrum
+  % optA          want to also optimize magnitude? Default: false
   %
   % OUTPUT:
   %
-  % para        optimal parameters [rs,cTH,d,magnitude]
-  %             or [rs,cTH,d], if optA is false
+  % para          optimal parameters [rs,cTH,d,magnitude]
+  %               or [rs,cTH,d], if optA is false
   % 
-  % Last modified by plattner-at-alumni.ethz.ch  4/8/2024
+  % Last modified by plattner-at-alumni.ethz.ch  4/17/2024
 
   defval('sig',[])
   defval('optA',false)
@@ -38,11 +39,19 @@ function para = findParaMinDiff_Wiec(spec,lrng,rplanet,startPara,Ltap,Lmax,sig,o
   end
   
   %opts = optimset('MaxFunEvals',10000);
+  %opts = optimset('Algorithm','sqp');
   if optA
     Sw_loc = specWiec(startPara(1),startPara(2),startPara(3),1,rplanet,Lmax,Ltap,M);
-    A = bestA(Sw_loc,spec);
-    xstart = [startPara(:)',A];
+    lsA = (min(lrng)+1) : (max(lrng)+1);
+    Astart = bestA(Sw_loc(lsA),spec(lsA));
+    xstart = [startPara(:)',Astart];
+    %lb = [0,0,0,0];
   else
     xstart = startPara;
+    %lb = [0,0,0];
   end
+
   para = fminsearch(@(x) mindiff_Wiec(spec, x, lrng, Ltap, rplanet, Lmax, M, sig, optA) , xstart);%, opts);
+
+  %%%% Tried constrained fitting, but fminsearch is just so much better, and if the starting values are picked ok, then it works with expected constraints
+  %para = fmincon(@(x) mindiff_Wiec(spec, x, lrng, Ltap, rplanet, Lmax, M, sig, optA) , xstart,[],[], [],[],lb,[],[], opts);

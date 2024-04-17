@@ -1,5 +1,5 @@
 function err = mindiff_WiecTB(spec, x, lrng, Ltap, rplanet, Lmax, M, sig, optA)
-  % x = [rs,cTH,d,magnitude]
+  % x = [rtop,rbot,cTH,(magnitude)]
   % spec needs to include the zero degree value
 
   defval('sig',[])

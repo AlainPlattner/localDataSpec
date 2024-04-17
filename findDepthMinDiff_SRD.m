@@ -41,7 +41,11 @@ catch
 end
 
 % Trying to solve for rs and amp
-xstart = [rstart,rms(spec)];
+% First need to set good starting value for A
+SRD_loc = SRD(rstart,robs,rref,Lmax,Ltap,M);
+lsA = (min(lrng)+1) : (max(lrng)+1);
+Astart = bestA(SRD_loc(lsA),spec(lsA));
+xstart = [rstart,Astart];
 xopt = fminsearch(@(x) mindiff_SRD(spec,x,lrng,Ltap,robs,rref,Lmax,M,sig), xstart);%, opts);
 
 if isempty(sig)
