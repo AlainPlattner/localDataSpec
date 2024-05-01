@@ -1,5 +1,5 @@
-function para = findParaMinDiff_Wiec(spec,lrng,rplanet,startPara,Ltap,Lmax,sig,optA)
-  % para = findParaMinDiff_Wiec(spec,lrng,rplanet,startPara,Ltap,Lmax,sig,optA)
+function varargout = findParaMinDiff_Wiec(spec,lrng,rplanet,startPara,Ltap,Lmax,sig,optA)
+  % [para,chisq] = findParaMinDiff_Wiec(spec,lrng,rplanet,startPara,Ltap,Lmax,sig,optA)
   %
   % Calculate the parameters for Wieczorek 2018 equation 27 
   % (same as Gong & Wieczorek 2021 eq 2).
@@ -21,8 +21,9 @@ function para = findParaMinDiff_Wiec(spec,lrng,rplanet,startPara,Ltap,Lmax,sig,o
   %
   % para          optimal parameters [rs,cTH,d,magnitude]
   %               or [rs,cTH,d], if optA is false
+  % chisq         chi-squared value of the solution
   % 
-  % Last modified by plattner-at-alumni.ethz.ch  4/17/2024
+  % Last modified by plattner-at-alumni.ethz.ch  5/1/2024
 
   defval('sig',[])
   defval('optA',false)
@@ -48,7 +49,13 @@ function para = findParaMinDiff_Wiec(spec,lrng,rplanet,startPara,Ltap,Lmax,sig,o
     xstart = startPara;
   end
 
-  para = fminsearch(@(x) mindiff_Wiec(spec, x, lrng, Ltap, rplanet, Lmax, M, sig, optA) , xstart);%, opts);
+  [para,chisq] = fminsearch(@(x) mindiff_Wiec(spec, x, lrng, Ltap, rplanet, Lmax, M, sig, optA) , xstart);%, opts);
 
+  if nargout < 2
+    varargout = {para};
+  else
+    varargout = {para,chisq};
+  end
+  
   %%%% Tried constrained fitting, but fminsearch is just so much better, and if the starting values are picked ok, then it works with expected constraints
   %para = fmincon(@(x) mindiff_Wiec(spec, x, lrng, Ltap, rplanet, Lmax, M, sig, optA) , xstart,[],[], [],[],lb,[],[], opts);

@@ -15,19 +15,20 @@ Ssrd_reg=SRD(rcore,robs,rref,Lmax,Ltap,M);
 
 %%% Take only the degrees within the given range
 ls=min(lrng):max(lrng);
-Ssrd_reg = Ssrd_reg(ls+1);
-spec = spec(ls+1);
-
 
 if isempty(sig)
-    %%% Error is the difference of the log
-    %%% In this case, provide A
-    A=bestA(Ssrd_reg,spec);
-    Ssrd_reg=A*Ssrd_reg;
-    err = rms(log(Ssrd_reg) - log(spec));
+%%% Error is the difference of the log
+%%% In this case, provide A
+  Ssrd_reg = Ssrd_reg(ls+1);
+  spec = spec(ls+1);
+  A=bestA(Ssrd_reg,spec);
+  Ssrd_reg=A*Ssrd_reg;
+  err = rms(log(Ssrd_reg) - log(spec));
 else
-    % This is the Wieczorek style. This is better
-    Ssrd_reg=A*Ssrd_reg;
-    sig = sig(ls+1);
-    err = 1/length(spec)  *  sum(  ( (Ssrd_reg - spec)./sig ).^2  );
+  % This is the Wieczorek style. This is better
+  Ssrd_reg=A*Ssrd_reg;
+  nparam = 2;
+  err = chisqSpecMisf(Ssrd_reg,spec,sig,nparam,ls);
+  %sig = sig(ls+1);
+  %err = 1/length(spec)  *  sum(  ( (Ssrd_reg - spec)./sig ).^2  );
 end

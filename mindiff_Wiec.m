@@ -9,21 +9,22 @@ function err = mindiff_Wiec(spec, x, lrng, Ltap, rplanet, Lmax, M, sig, optA)
 
   % Use only degrees in given range
   ls=min(lrng):max(lrng);
-  Sw_loc = Sw_loc(ls+1);
-  spec = spec(ls+1);
+  
 
   % Normalize
   if optA
     Sw_loc = x(3)*Sw_loc;
   else
-    A=bestA(Sw_loc,spec);
+    A=bestA(Sw_loc(ls+1),spec(ls+1));
     Sw_loc=A*Sw_loc;
   end
   
   %% Calc eerror
   if isempty(sig)
-    err = rms(log(Sw_loc) - log(spec));
+    err = rms(log(Sw_loc(ls+1)) - log(spec(ls+2)));
   else
-    sig = sig(ls+1);
-    err = 1/length(spec)  *  sum(  ( (Sw_loc - spec)./sig ).^2  );
+    nparam = 3;
+    err = chisqSpecMisf(Sw_loc,spec,sig,nparam,ls);
+    %sig = sig(ls+1);
+    %err = 1/length(spec)  *  sum(  ( (Sw_loc - spec)./sig ).^2  );
   end

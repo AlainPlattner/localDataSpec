@@ -1,5 +1,5 @@
-function para = findParaMinDiff_WiecTB(spec,lrng,rplanet,startPara,Ltap,Lmax,sig,optA)
-  % para = findParaMinDiff_WiecTB(spec,lrng,rplanet,startPara,Ltap,Lmax,sig,optA)
+function varargout = findParaMinDiff_WiecTB(spec,lrng,rplanet,startPara,Ltap,Lmax,sig,optA)
+  % [para,chisq] = findParaMinDiff_WiecTB(spec,lrng,rplanet,startPara,Ltap,Lmax,sig,optA)
   %
   % Calculate the parameters for Wieczorek 2018 equation 32
   %
@@ -22,8 +22,9 @@ function para = findParaMinDiff_WiecTB(spec,lrng,rplanet,startPara,Ltap,Lmax,sig
   %
   % para        optimal parameters [rtop,rbot,cTH,magnitude]
   %             or [rtop,rbot,cTH], if optA is false
+  % chisq       chi-squared value of the solution
   % 
-  % Last modified by plattner-at-alumni.ethz.ch  4/17/2024
+  % Last modified by plattner-at-alumni.ethz.ch  5/1/2024
 
   defval('sig',[])
   defval('optA',false)
@@ -55,7 +56,13 @@ function para = findParaMinDiff_WiecTB(spec,lrng,rplanet,startPara,Ltap,Lmax,sig
     %conmat = [-1,1,0]; % Meaning bot-rtop<=0 and -cTH<=0 
     %convec = [0];
   end
-  para = fminsearch(@(x) mindiff_WiecTB(spec, x, lrng, Ltap, rplanet, Lmax, M, sig, optA) ,xstart);%, opts);
+  [para,chisq] = fminsearch(@(x) mindiff_WiecTB(spec, x, lrng, Ltap, rplanet, Lmax, M, sig, optA) ,xstart);%, opts);
+
+  if nargout < 2
+    varargout = {para};
+  else
+    varargout = {para,chisq};
+  end
 
 %%% Haven't managed to get reasonable solutions with fmincon. Unfortunately, fminsearch can return rtop < rbot.
 %%% maybe it's better to use findParMinDiff_Wiec instead ( using the thickness instead of top and bottom)

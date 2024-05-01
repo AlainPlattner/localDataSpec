@@ -1,7 +1,7 @@
 function csq = chisqSpecMisf(spec1,spec2,sig,nparam,lrng)
   % csq = chisqSpecMisf(spec1,spec2,sig,nparam,lrng)
   %
-  % Calculates the Chi square misfit of two spectra (hopefully) similar
+  % Calculates the Chi-squared misfit of two spectra (hopefully) similar
   % to Wieczorek (2018).
   % NOTE THAT THE PROVIDED SPECTRA MUST INCLUDE ALL DEGREES FROM 0 TO LMAX.
   % Otherwise the lrng subselection doesn't work properly
@@ -14,7 +14,13 @@ function csq = chisqSpecMisf(spec1,spec2,sig,nparam,lrng)
   % nparam         On how many independent parameters does the analytical spectrum
   %                depend
   % lrng           For which spherical harmonic degrees do you want to calculate
-  %                the chi square misfit?
+  %                the chi-squared misfit?
+  %
+  % OUTPUT:
+  %
+  % csq            The chi-squared value
+  %
+  % last modified by plattner-at-alumni.ethz.ch, 5/1/2024
   
   
   lrng = min(lrng):max(lrng);
