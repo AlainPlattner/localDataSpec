@@ -20,9 +20,9 @@ function csq = chisqSpecMisf(spec1,spec2,sig,nparam,lrng)
   %
   % csq            The chi-squared value
   %
-  % last modified by plattner-at-alumni.ethz.ch, 5/1/2024
+  % last modified by plattner-at-alumni.ethz.ch, 5/2/2024
   
   
   lrng = min(lrng):max(lrng);
-  nparam = 2;
+
   csq = 1/(length(lrng)-nparam)  *  sum(  ( (spec1(lrng+1) - spec2(lrng+1))./sig(lrng+1) ).^2  );
