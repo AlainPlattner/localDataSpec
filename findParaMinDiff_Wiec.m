@@ -9,7 +9,7 @@ function varargout = findParaMinDiff_Wiec(spec,lrng,rplanet,startPara,Ltap,Lmax,
   % spec          spectrum to be fitted
   % lrng          degrees for which to fit spectrum
   % rplanet       planet radius
-  % startPara     starting values for the parameters [rs,cTH,d]
+  % startPara     starting values for the parameters [rs,cTH]
   %                  rs is center of sills,
   %                  cTH is sill radius,
   % Ltap          tapering bandwidth
@@ -19,11 +19,11 @@ function varargout = findParaMinDiff_Wiec(spec,lrng,rplanet,startPara,Ltap,Lmax,
   %
   % OUTPUT:
   %
-  % para          optimal parameters [rs,cTH,d,magnitude]
-  %               or [rs,cTH,d], if optA is false
+  % para          optimal parameters [rs,cTH,magnitude]
+  %               or [rs,cTH], if optA is false
   % chisq         chi-squared value of the solution
   % 
-  % Last modified by plattner-at-alumni.ethz.ch  5/1/2024
+  % Last modified by plattner-at-alumni.ethz.ch  6/13/2024
 
   defval('sig',[])
   defval('optA',false)
