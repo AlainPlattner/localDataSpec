@@ -45,7 +45,11 @@ end
 % First need to set good starting value for A
 SRD_loc = SRD(rstart,robs,rref,Lmax,Ltap,M);
 lsA = (min(lrng)+1) : (max(lrng)+1);
-Astart = bestA(SRD_loc(lsA),spec(lsA));
+if sig
+  Astart = bestAsig(SRD_loc(lsA),spec(lsA),sig(lsA));
+else
+  Astart = bestA(SRD_loc(lsA),spec(lsA));
+end
 xstart = [rstart,Astart];
 [xopt,chisq] = fminsearch(@(x) mindiff_SRD(spec,x,lrng,Ltap,robs,rref,Lmax,M,sig), xstart);%, opts);
 

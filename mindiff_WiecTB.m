@@ -16,7 +16,11 @@ function err = mindiff_WiecTB(spec, x, lrng, Ltap, rplanet, Lmax, M, sig, optA)
   if optA
     Sw_loc = x(4)*Sw_loc;
   else
-    A=bestA(Sw_loc(ls+1),spec(ls+1));
+    if sig
+      A = bestAsig(Sw_loc(ls+1),spec(ls+1),sig(ls+1));
+    else
+      A=bestA(Sw_loc(ls+1),spec(ls+1));
+    end
     Sw_loc=A*Sw_loc;
   end
   

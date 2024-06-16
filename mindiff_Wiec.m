@@ -15,7 +15,11 @@ function err = mindiff_Wiec(spec, x, lrng, Ltap, rplanet, Lmax, M, sig, optA)
   if optA
     Sw_loc = x(3)*Sw_loc;
   else
-    A=bestA(Sw_loc(ls+1),spec(ls+1));
+    if sig
+      A = bestAsig(Sw_loc(ls+1),spec(ls+1),sig(ls+1));
+    else
+      A=bestA(Sw_loc(ls+1),spec(ls+1));
+    end
     Sw_loc=A*Sw_loc;
   end
   
@@ -25,6 +29,4 @@ function err = mindiff_Wiec(spec, x, lrng, Ltap, rplanet, Lmax, M, sig, optA)
   else
     nparam = 3;
     err = chisqSpecMisf(Sw_loc,spec,sig,nparam,ls);
-    %sig = sig(ls+1);
-    %err = 1/length(spec)  *  sum(  ( (Sw_loc - spec)./sig ).^2  );
   end
