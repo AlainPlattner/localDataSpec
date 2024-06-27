@@ -63,7 +63,7 @@ function intvals=intfun0(ls,cTH)
   x0=cos(cTH);
   for i=1:length(ls)
     %intvals(i) = 2/(2*ls(i)+1)*legendreprodint(ls(i),0,1,0,x0,'gl');
-    intvals(i) = 2*pi*legendreprodint(ls(i),0,1,0,x0,'gl');
+    intvals(i) = 0.5*legendreprodint(ls(i),0,1,0,x0,'gl');
   end
 end
 
@@ -85,14 +85,14 @@ function intvals=intfun1(ls,cTH)
   intvals=nan(size(ls));
   x0=cos(cTH);
   for i=1:length(ls)
-      intvals(i) = 2*pi*legendreprodint(ls(i),1,1,1,x0,'gl');
+      intvals(i) = legendreprodint(ls(i),1,1,1,x0,'gl');
   end
 end
 
 
 function val=pval0(ls,cTH)
   %Pl0 = sqrt(2./(2*ls+1)).*xlm(ls,0,cTH);
-  Pl0 = sqrt(4*pi./(2*ls+1)).*xlm(ls,0,cTH);
+  Pl0 = sqrt(8*pi./(2*ls+1)).*xlm(ls,0,cTH);
   val = Pl0*sin(cTH)^2./(ls+2);
 end
 
