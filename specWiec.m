@@ -20,7 +20,7 @@ function Sl=specWiec(rs,cTH,Mag,rplanet,Lmax,Ltap,M)
   % 
   % Last modified by plattner-at-alumni.ethz.ch, 6/27/2024
   %
-  % Note that on 6/27/2024, I found typos in the code and wrong normalizations.
+  % Note that on 7/3/2024, I found typos in the code and wrong normalizations.
   
   defval('M',[])
   defval('Ltap',0)
@@ -63,7 +63,7 @@ function intvals=intfun0(ls,cTH)
   x0=cos(cTH);
   for i=1:length(ls)
     %intvals(i) = 2/(2*ls(i)+1)*legendreprodint(ls(i),0,1,0,x0,'gl');
-    intvals(i) = 0.5*legendreprodint(ls(i),0,1,0,x0,'gl');
+    intvals(i) = legendreprodint(ls(i),0,1,0,x0,'gl');
   end
 end
 
@@ -92,13 +92,17 @@ end
 
 function val=pval0(ls,cTH)
   %Pl0 = sqrt(2./(2*ls+1)).*xlm(ls,0,cTH);
-  Pl0 = sqrt(8*pi./(2*ls+1)).*xlm(ls,0,cTH);
+  %m=0
+  %Pl0 = (-1)^m*sqrt(2-(m==0))*sqrt(4*pi./(2*ls+1)).*xlm(ls,0,cTH);
+  Pl0 = sqrt(4*pi./(2*ls+1)).*xlm(ls,0,cTH);
   val = Pl0*sin(cTH)^2./(ls+2);
 end
 
 function val=pval1(ls,cTH)
   % We have the condon-shortley phase. Remove it
   %Pl1 = - sqrt(4./(2*ls+1)).*xlm(ls,1,cTH);
-  Pl1 = - sqrt(8*pi./(2*ls+1)).*xlm(ls,1,cTH);
+  %m=1
+  %Pl1 = (-1)^m * sqrt(2-(m==0)) * sqrt(4*pi./(2*ls+1)).*xlm(ls,1,cTH);
+  Pl1 = -sqrt(8*pi./(2*ls+1)).*xlm(ls,1,cTH);
   val = Pl1*sin(cTH)*cos(cTH)./(ls+2);
 end
