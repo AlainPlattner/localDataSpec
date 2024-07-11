@@ -23,7 +23,7 @@ function varargout = findParaMinDiff_Wiec(spec,lrng,rplanet,startPara,Ltap,Lmax,
   %               or [rs,cTH], if optA is false
   % chisq         chi-squared value of the solution
   % 
-  % Last modified by plattner-at-alumni.ethz.ch  6/13/2024
+  % Last modified by plattner-at-alumni.ethz.ch  7/11/2024
 
   defval('sig',[])
   defval('optA',false)
@@ -43,7 +43,11 @@ function varargout = findParaMinDiff_Wiec(spec,lrng,rplanet,startPara,Ltap,Lmax,
   if optA
     Sw_loc = specWiec(startPara(1),startPara(2),1,rplanet,Lmax,Ltap,M);
     lsA = (min(lrng)+1) : (max(lrng)+1);
-    Astart = bestA(Sw_loc(lsA),spec(lsA));
+    if isempty(sig)
+    	Astart = bestA(Sw_loc(lsA),spec(lsA));
+    else
+        Astart = bestAsig(Sw_loc(lsA),spec(lsA),sig(lsA));
+    end
     xstart = [startPara(:)',Astart];
   else
     xstart = startPara;
