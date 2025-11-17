@@ -25,7 +25,7 @@ function err = mindiff_Wiec(spec, x, lrng, Ltap, rplanet, Lmax, M, sig, optA)
   
   %% Calc eerror
   if isempty(sig)
-    err = rms(log(Sw_loc(ls+1)) - log(spec(ls+2)));
+    err = rms(log(Sw_loc(ls+1)) - log(spec(ls+1)));
   else
     nparam = 3;
     err = chisqSpecMisf(Sw_loc,spec,sig,nparam,ls);
