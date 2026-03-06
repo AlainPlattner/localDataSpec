@@ -1,4 +1,4 @@
-function rs=findDepthMinDiffSig_McLeod(spec,lrng,robs,rplanet,rstart,Ltap,Lmax,sig)
+function rs=findDepthMinDiffSig_McLeod(spec,lrng,robs,rplanet,rstart,Ltap,Lmax,sig,mistype)
 % rs=findDepthMinDiff_McLeod(spec,lrng,robs,rstart,Ltap,Lmax,bias)
 %
 % Calculate source radius for which an upward-continued and regionalized
@@ -16,13 +16,16 @@ function rs=findDepthMinDiffSig_McLeod(spec,lrng,robs,rplanet,rstart,Ltap,Lmax,s
 % Ltap     tapering bandwidth
 % Lmax     maximum spherical-harmonic degree for the McLeod spectrum
 % sig      localization uncertainty
+% mistype  how to calculate spectral misfit: diff of log, or just diff
 %
 % OUTPUT:
 %
 % rs       source radius [rm]
 %
 % Last modified by plattner-at-alumni.ethz.ch, 02/27/2026
+
+defval('mistype','log')
   
 opts = optimset('MaxFunEvals',10000);
 
-rs = fminsearch(@(x) mindiffSig_McLeod(spec,x,lrng,Ltap,robs,rplanet,Lmax,sig), rstart, opts);
+rs = fminsearch(@(x) mindiffSig_McLeod(spec,x,lrng,Ltap,robs,rplanet,Lmax,sig,mistype), rstart, opts);

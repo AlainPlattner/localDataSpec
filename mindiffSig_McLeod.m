@@ -1,4 +1,4 @@
-function err=mindiffSig_McLeod(spec,rcore,lrng,Ltap,robs,rplanet,Lmax,sig)
+function err=mindiffSig_McLeod(spec,rcore,lrng,Ltap,robs,rplanet,Lmax,sig,mistype)
 % err=mindiffSig_McLeod(spec,rcore,lrng,Ltap,robs,Lmax,bias)
 %
 % Calculates the root mean square error of the misfit of the logariths of
@@ -9,6 +9,8 @@ function err=mindiffSig_McLeod(spec,rcore,lrng,Ltap,robs,rplanet,Lmax,sig)
 % then get the potential-field coefficients, then power spec, then
 % "undoing" the (l+1)^2 factor, set bias=true  
 
+defval('mistype','log')
+  
 Smc_reg=McLeod(rcore,robs,rplanet,Lmax,Ltap);
 
 %%% Take only the degrees within the given range
@@ -23,5 +25,10 @@ sig = sig(ls+1);
 A=bestAsig(Smc_reg,spec,sig);
 Smc_reg=A*Smc_reg;
 
+switch mistype
+  case 'log'
 %%% Error is the difference of the log
-err = rms(log(Smc_reg) - log(spec));
+    err = rms(log(Smc_reg) - log(spec));
+  otherwise
+    err = rms(Smc_reg - spec);
+end
