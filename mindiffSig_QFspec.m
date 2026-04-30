@@ -1,10 +1,11 @@
-function err=mindiffSig_QFspec(spec,rcore,lrng,Ltap,robs,Lmax,sig)
-% err=mindiffSig_QFspec(spec,rcore,lrng,Ltap,robs,Lmax,sig)
+function err=mindiffSig_QFspec(spec,rcore,lrng,Ltap,robs,Lmax,sig,mistype)
+% err=mindiffSig_QFspec(spec,rcore,lrng,Ltap,robs,Lmax,sig,mistype)
 %
 % Calculates the root mean square error of the misfit of the logariths of
 % the provided regional spectrum and the regionalized Nonzonal spectrum for
 % the degrees given in lrng.
 
+defval('mistype','log')
 
 Sqf_reg=QFspec(rcore,robs,Lmax,Ltap);
 
@@ -19,5 +20,10 @@ sig = sig(ls+1);
 A=bestAsig(Sqf_reg,spec,sig);
 Sqf_reg=A*Sqf_reg;
 
+switch mistype
+  case 'log'
 %%% Error is the difference of the log
 err = rms(log(Sqf_reg) - log(spec));
+  otherwise
+    err = rms(Smc_reg - spec);
+end

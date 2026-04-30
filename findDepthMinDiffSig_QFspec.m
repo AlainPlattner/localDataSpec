@@ -1,5 +1,5 @@
-function rs=findDepthMinDiffSig_QFspec(spec,lrng,robs,rstart,Ltap,Lmax)
-% rs=findDepthMinDiffSig_QFspec(spec,lrng,robs,rstart,Ltap,Lmax)
+function rs=findDepthMinDiffSig_QFspec(spec,lrng,robs,rstart,Ltap,Lmax,sig,mistype)
+% rs=findDepthMinDiffSig_QFspec(spec,lrng,robs,rstart,Ltap,Lmax,sig,mistype)
 %
 % Calculate source radius for which an upward-continued and regionalized
 % Nonzonal spectrum (Langlais et al. 2014) has the minimal difference with 
@@ -23,13 +23,16 @@ function rs=findDepthMinDiffSig_QFspec(spec,lrng,robs,rstart,Ltap,Lmax)
 % Ltap     tapering bandwidth
 % Lmax     maximum spherical-harmonic degree for the McLeod spectrum
 % sig      localization uncertainty
+% mistype  how to calculate spectral misfit: diff of log, or just diff
 %
 % OUTPUT:
 %
 % rs       source radius [rm]
 %
-% Last modified by plattner-at-alumni.ethz.ch, 2/27/2026
+% Last modified by plattner-at-alumni.ethz.ch, 4/30/2026
+
+defval('mistype','log')
   
 opts = optimset('MaxFunEvals',10000);
 
-rs = fminsearch(@(x) mindiff_QFspec(spec,x,lrng,Ltap,robs,Lmax,sig), rstart, opts);
+rs = fminsearch(@(x) mindiffSig_QFspec(spec,x,lrng,Ltap,robs,Lmax,sig,mistype), rstart, opts);
