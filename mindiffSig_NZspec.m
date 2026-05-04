@@ -26,6 +26,9 @@ switch mistype
   case 'log'
 %%% Error is the difference of the log
     err = rms(log(Snz_reg) - log(spec));
+    case 'csq'
+        nparam=2;
+        err=1/(length(ls)-nparam)  *  sum(  ( (Snz_reg - spec )./sig ).^2  );
   otherwise
     err = rms(Smc_reg - spec);
 end
